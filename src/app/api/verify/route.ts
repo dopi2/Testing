@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyAccessToken } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { TokenPayload } from "@/types/auth";
 
 export async function GET(req: Request) {
   try {
@@ -13,14 +14,15 @@ export async function GET(req: Request) {
       token = authHeader.split(" ")[1];
     } else {
       // Fallback to cookie
-      token = cookies().get("accessToken")?.value || null;
+      const cookieStore = await cookies();
+      token = cookieStore.get("accessToken")?.value || null;
     }
 
     if (!token) {
       return NextResponse.json({ error: "No token" }, { status: 401 });
     }
 
-    const payload = verifyAccessToken(token) as any;
+    const payload = verifyAccessToken(token) as TokenPayload;
     
     // Verify user still exists in database
     const user = await prisma.user.findUnique({
@@ -41,8 +43,8 @@ export async function GET(req: Request) {
       },
     });
 
-  } catch (err: any) {
-    console.error("❌ Token verification failed:", err.message || err);
+  } catch (error) {
+    console.error("Token verification failed:", error instanceof Error ? error.message : error);
     return NextResponse.json({ error: "Invalid token" }, { status: 401 });
   }
 }

@@ -5,9 +5,9 @@ import Navbar from "@/components/Navbar";
 import ProtectedPage from "@/components/ProtectedPage";
 
 export default function AdminDashboard() {
-  const [data, setData] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState({
+  const [_, setData] = useState("");
+  const [isLoading, setLoading] = useState(true);
+  const [currentStats, setStats] = useState({
     totalUsers: 0,
     activeSessions: 0,
     systemHealth: "Healthy"

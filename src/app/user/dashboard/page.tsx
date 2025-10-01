@@ -5,9 +5,9 @@ import Navbar from "@/components/Navbar";
 import ProtectedPage from "@/components/ProtectedPage";
 
 export default function UserDashboard() {
-  const [data, setData] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [userStats, setUserStats] = useState({
+  const [_, setData] = useState("");
+  const [isLoading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
     tasksCompleted: 12,
     projects: 3,
     weeklyProgress: 75

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { verifyAccessToken } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { TokenPayload } from "@/types/auth";
 
 export async function GET(req: Request) {
   try {
@@ -10,7 +11,7 @@ export async function GET(req: Request) {
     }
 
     const token = authHeader.split(" ")[1];
-    const decoded = verifyAccessToken(token) as any;
+    const decoded = verifyAccessToken(token) as TokenPayload;
     
     if (decoded.role !== "admin") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
