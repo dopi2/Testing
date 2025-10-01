@@ -1,8 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    serverExternalPackages: ['@prisma/client', 'bcryptjs'],
-  },
+  // Remove experimental.serverComponentsExternalPackages
+  // Next.js 15 handles this automatically
 }
 
 module.exports = nextConfig

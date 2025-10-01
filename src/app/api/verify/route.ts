@@ -3,12 +3,6 @@ import { cookies } from "next/headers";
 import { verifyAccessToken } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
-interface TokenPayload {
-  userId: string;
-  email: string;
-  role: string;
-}
-
 export async function GET(req: Request) {
   try {
     // Check Authorization header
@@ -26,7 +20,7 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "No token" }, { status: 401 });
     }
 
-    const payload = verifyAccessToken(token) as TokenPayload;
+    const payload = verifyAccessToken(token) as any;
     
     // Verify user still exists in database
     const user = await prisma.user.findUnique({
@@ -47,8 +41,8 @@ export async function GET(req: Request) {
       },
     });
 
-  } catch (error: unknown) {
-    console.error("❌ Token verification failed:", error);
+  } catch (err: any) {
+    console.error("❌ Token verification failed:", err.message || err);
     return NextResponse.json({ error: "Invalid token" }, { status: 401 });
   }
 }

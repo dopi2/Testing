@@ -40,9 +40,7 @@ export default function SignupPage() {
       } else {
         router.push("/user/dashboard");
       }
-    } catch (err) {
-      setError("Something went wrong. Please try again.");
-    } finally {
+    }  finally {
       setLoading(false);
     }
   }
