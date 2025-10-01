@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import ProtectedPage from "@/components/ProtectedPage";
 
 export default function AdminDashboard() {
-  const [_, setData] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [isLoading, setLoading] = useState(true);
   const [currentStats, setStats] = useState({
     totalUsers: 0,
@@ -44,13 +44,15 @@ export default function AdminDashboard() {
               credentials: "include",
             });
           } else {
-            setData("Session expired, please log in again.");
+            setError("Session expired, please log in again.");
             return;
           }
         }
 
         const d = await res.json();
-        setData(d.secret || d.error);
+        if (d.error) {
+          setError(d.error);
+        }
         
         // Mock stats - replace with actual API calls
         setStats({
@@ -60,7 +62,7 @@ export default function AdminDashboard() {
         });
       } catch (error) {
         console.error("Error fetching data:", error);
-        setData("Error loading dashboard data");
+        setError("Error loading dashboard data");
       } finally {
         setLoading(false);
       }
@@ -81,6 +83,11 @@ export default function AdminDashboard() {
             <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
             <p className="text-gray-600 mt-2">Manage your platform and monitor system performance</p>
           </div>
+
+          {/* Error Display */}
+          {error && (
+            <div className="mb-4 p-4 bg-red-50 text-red-600 rounded-lg">{error}</div>
+          )}
 
           {/* Stats Grid */}
           {isLoading ? (

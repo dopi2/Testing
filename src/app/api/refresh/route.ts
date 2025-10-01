@@ -15,7 +15,7 @@ export async function POST() {
 
   try {
     // Verify the refresh token
-    const decoded = verifyRefreshToken(refreshToken) as TokenPayload;
+    const { id, email, role } = verifyRefreshToken(refreshToken) as TokenPayload;
     
     // Check if refresh token exists in database and is not expired
     const tokenRecord = await prisma.refreshToken.findFirst({

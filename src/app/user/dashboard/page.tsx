@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import ProtectedPage from "@/components/ProtectedPage";
 
 export default function UserDashboard() {
-  const [_, setData] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [isLoading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     tasksCompleted: 12,
@@ -44,16 +44,18 @@ export default function UserDashboard() {
               credentials: "include",
             });
           } else {
-            setData("Session expired, please log in again.");
+            setError("Session expired, please log in again.");
             return;
           }
         }
 
         const d = await res.json();
-        setData(d.secret || d.error);
+        if (d.error) {
+          setError(d.error);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
-        setData("Error loading dashboard data");
+        setError("Error loading dashboard data");
       } finally {
         setLoading(false);
       }
@@ -85,6 +87,10 @@ export default function UserDashboard() {
           </div>
 
           {/* Stats Grid */}
+          {error && (
+            <div className="mb-4 p-4 bg-red-50 text-red-600 rounded-lg">{error}</div>
+          )}
+          
           {isLoading ? (
             <div className="text-center">Loading...</div>
           ) : (
