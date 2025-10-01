@@ -6,7 +6,7 @@ import { setAuthCookies } from "@/lib/cookies";
 import { TokenPayload } from "@/types/auth";
 
 export async function POST() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const refreshToken = cookieStore.get("refreshToken")?.value;
   
   if (!refreshToken) {

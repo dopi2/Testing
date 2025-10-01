@@ -5,7 +5,7 @@ import { clearAuthCookies } from "@/lib/cookies";
 
 export async function POST() {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const refreshToken = cookieStore.get("refreshToken")?.value;
 
     // Delete refresh token from database
