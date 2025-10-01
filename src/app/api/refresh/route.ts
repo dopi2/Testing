@@ -3,7 +3,10 @@ import { cookies } from "next/headers";
 import prisma from "@/lib/prisma";
 import { verifyRefreshToken, signAccessToken, signRefreshToken } from "@/lib/auth";
 import { setAuthCookies } from "@/lib/cookies";
-import { TokenPayload } from "@/types/auth";
+
+interface RefreshTokenPayload {
+  userId: string;
+}
 
 export async function POST() {
   const cookieStore = await cookies();
@@ -15,7 +18,7 @@ export async function POST() {
 
   try {
     // Verify the refresh token
-    const { id, email, role } = verifyRefreshToken(refreshToken) as TokenPayload;
+    const decoded = verifyRefreshToken(refreshToken) as RefreshTokenPayload;
     
     // Check if refresh token exists in database and is not expired
     const tokenRecord = await prisma.refreshToken.findFirst({
@@ -31,14 +34,18 @@ export async function POST() {
     }
 
     // Generate new tokens
-    const newAccessToken = signAccessToken({ 
-      userId: tokenRecord.user.id, 
-      email: tokenRecord.user.email, 
-      role: tokenRecord.user.role 
+    const newAccessToken = signAccessToken({
+      userId: tokenRecord.user.id,
+      email: tokenRecord.user.email,
+      role: tokenRecord.user.role as "user" | "admin",
+      id: ""
     });
     
-    const newRefreshToken = signRefreshToken({ 
-      userId: tokenRecord.user.id 
+    const newRefreshToken = signRefreshToken({
+      userId: tokenRecord.user.id,
+      id: "",
+      email: "",
+      role: "user"
     });
 
     // Delete old refresh token and save new one

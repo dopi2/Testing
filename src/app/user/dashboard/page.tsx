@@ -5,13 +5,8 @@ import Navbar from "@/components/Navbar";
 import ProtectedPage from "@/components/ProtectedPage";
 
 export default function UserDashboard() {
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setLoading] = useState(true);
-  const [stats, setStats] = useState({
-    tasksCompleted: 12,
-    projects: 3,
-    weeklyProgress: 75
-  });
+  const [data, setData] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
@@ -44,18 +39,16 @@ export default function UserDashboard() {
               credentials: "include",
             });
           } else {
-            setError("Session expired, please log in again.");
+            setData("Session expired, please log in again.");
             return;
           }
         }
 
         const d = await res.json();
-        if (d.error) {
-          setError(d.error);
-        }
+        setData(d.secret || d.error);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setError("Error loading dashboard data");
+        setData("Error loading dashboard data");
       } finally {
         setLoading(false);
       }
@@ -86,29 +79,30 @@ export default function UserDashboard() {
             </div>
           </div>
 
-          {/* Stats Grid */}
-          {error && (
-            <div className="mb-4 p-4 bg-red-50 text-red-600 rounded-lg">{error}</div>
-          )}
-          
-          {isLoading ? (
-            <div className="text-center">Loading...</div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white p-6 rounded-lg shadow-sm">
-                <h2 className="text-xl font-semibold text-gray-900">Tasks Completed</h2>
-                <p className="text-3xl font-bold mt-2 text-blue-600">{stats.tasksCompleted}</p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-sm">
-                <h2 className="text-xl font-semibold text-gray-900">Active Projects</h2>
-                <p className="text-3xl font-bold mt-2 text-green-600">{stats.projects}</p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-sm">
-                <h2 className="text-xl font-semibold text-gray-900">Weekly Progress</h2>
-                <p className="text-3xl font-bold mt-2 text-purple-600">{stats.weeklyProgress}%</p>
-              </div>
+          {/* Data Card */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900">Your Secure Data</h2>
+              <p className="text-sm text-gray-600 mt-1">Personalized information for your account</p>
             </div>
-          )}
+            
+            <div className="p-6">
+              {loading ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                </div>
+              ) : (
+                <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                  <div className="flex items-start">
+                    <svg className="w-5 h-5 text-purple-600 mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p className="text-purple-800 font-medium">{data}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </ProtectedPage>
