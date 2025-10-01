@@ -21,14 +21,14 @@ export async function POST(req: Request) {
     }
 
     // Generate tokens
-    const accessToken = signAccessToken({ 
-      userId: user.id, 
-      email: user.email, 
-      role: user.role 
+    const accessToken = signAccessToken({
+      userId: user.id,
+      email: user.email,
+      role: user.role
     });
     
-    const refreshToken = signRefreshToken({ 
-      userId: user.id 
+    const refreshToken = signRefreshToken({
+      userId: user.id
     });
 
     // Save refresh token to database
