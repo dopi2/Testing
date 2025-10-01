@@ -83,9 +83,24 @@ export default function AdminDashboard() {
           </div>
 
           {/* Stats Grid */}
-       
-
-      
+          {isLoading ? (
+            <div className="text-center">Loading...</div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h2 className="text-xl font-semibold text-gray-900">Total Users</h2>
+                <p className="text-3xl font-bold mt-2 text-blue-600">{currentStats.totalUsers}</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h2 className="text-xl font-semibold text-gray-900">Active Sessions</h2>
+                <p className="text-3xl font-bold mt-2 text-green-600">{currentStats.activeSessions}</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h2 className="text-xl font-semibold text-gray-900">System Health</h2>
+                <p className="text-3xl font-bold mt-2 text-purple-600">{currentStats.systemHealth}</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </ProtectedPage>

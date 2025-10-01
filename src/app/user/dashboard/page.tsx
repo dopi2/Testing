@@ -74,7 +74,7 @@ export default function UserDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">Welcome Back!</h1>
-                <p className="text-gray-600 mt-2">Here's what's happening with your account today</p>
+                <p className="text-gray-600 mt-2">Here&apos;s what&apos;s happening with your account today</p>
               </div>
               <div className="hidden md:block">
                 <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-lg">
@@ -84,11 +84,25 @@ export default function UserDashboard() {
             </div>
           </div>
 
-       
-
-        
-
-         
+          {/* Stats Grid */}
+          {isLoading ? (
+            <div className="text-center">Loading...</div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h2 className="text-xl font-semibold text-gray-900">Tasks Completed</h2>
+                <p className="text-3xl font-bold mt-2 text-blue-600">{stats.tasksCompleted}</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h2 className="text-xl font-semibold text-gray-900">Active Projects</h2>
+                <p className="text-3xl font-bold mt-2 text-green-600">{stats.projects}</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h2 className="text-xl font-semibold text-gray-900">Weekly Progress</h2>
+                <p className="text-3xl font-bold mt-2 text-purple-600">{stats.weeklyProgress}%</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </ProtectedPage>

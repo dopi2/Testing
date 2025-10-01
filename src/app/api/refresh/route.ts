@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import prisma from "@/lib/prisma";
 import { verifyRefreshToken, signAccessToken, signRefreshToken } from "@/lib/auth";
 import { setAuthCookies } from "@/lib/cookies";
+import { TokenPayload } from "@/types/auth";
 
 export async function POST() {
   const cookieStore = cookies();
@@ -14,7 +15,7 @@ export async function POST() {
 
   try {
     // Verify the refresh token
-    const decoded = verifyRefreshToken(refreshToken) as any;
+    const decoded = verifyRefreshToken(refreshToken) as TokenPayload;
     
     // Check if refresh token exists in database and is not expired
     const tokenRecord = await prisma.refreshToken.findFirst({
